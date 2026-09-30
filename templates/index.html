@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ receita.titulo }}</title>
+    <!-- Versão estável do Tailwind CSS via CDN -->
+    <script src="https://tailwindcss.com"></script>
+</head>
+<body class="bg-amber-50 text-gray-800 font-sans antialiased">
+
+    <!-- Navegação / Cabeçalho -->
+    <header class="bg-orange-500 text-white shadow-md p-4">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold tracking-wide">🍊 Livro de Receitas Digital</h1>
+            <span class="text-sm bg-orange-600 px-3 py-1 rounded-full font-semibold">Caseiro & Fácil</span>
+        </div>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="max-w-4xl mx-auto my-8 px-4">
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+            
+            <!-- Imagem do Bolo Local Corrigida -->
+            <div class="h-72 w-full overflow-hidden relative">
+                <img src="{{ url_for('static', filename='bolo chocolate.jpg') }}" 
+                     alt="Bolo de cenoura com cobertura de chocolate" 
+                     class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
+                    <h2 class="text-2xl md:text-4xl font-extrabold text-white">{{ receita.titulo }}</h2>
+                </div>
+            </div>
+
+            <!-- Meta Informações (Tempo e Rendimento) -->
+            <div class="bg-orange-100 flex justify-around p-4 border-b border-orange-200 text-orange-900 font-medium">
+                <div class="flex items-center gap-2">
+                    <span>⏱️ Preparo: <strong>{{ receita.tempo_preparo }}</strong></span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span>🍰 Rendimento: <strong>{{ receita.rendimento }}</strong></span>
+                </div>
+            </div>
+
+            <div class="p-6 md:p-8 grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Coluna de Ingredientes -->
+                <div class="md:col-span-1 border-b md:border-b-0 md:border-r border-gray-200 pb-6 md:pb-0 md:pr-6">
+                    <h3 class="text-xl font-bold text-orange-600 mb-4 flex items-center gap-2">🛒 Ingredientes</h3>
+                    
+                    <h4 class="font-semibold text-gray-700 mt-2 mb-1">Massa:</h4>
+                    <ul class="space-y-2 text-sm">
+                        {% for item in receita.ingredientes_massa %}
+                        <li class="flex items-start gap-2">
+                            <span class="text-orange-500">•</span> {{ item }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+
+                    <h4 class="font-semibold text-gray-700 mt-4 mb-1">Cobertura:</h4>
+                    <ul class="space-y-2 text-sm">
+                        {% for item in receita.ingredientes_cobertura %}
+                        <li class="flex items-start gap-2">
+                            <span class="text-orange-500">•</span> {{ item }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <!-- Coluna do Modo de Preparo -->
+                <div class="md:col-span-2">
+                    <h3 class="text-xl font-bold text-orange-600 mb-4 flex items-center gap-2">🍳 Modo de Preparo</h3>
+                    
+                    <h4 class="font-semibold text-gray-700 mt-2 mb-2">Preparando a Massa:</h4>
+                    <ol class="space-y-3 text-sm list-decimal list-inside text-gray-600">
+                        {% for passo in receita.modo_preparo_massa %}
+                        <li class="leading-relaxed pl-1">{{ passo }}</li>
+                        {% endfor %}
+                    </ol>
+
+                    <h4 class="font-semibold text-gray-700 mt-6 mb-2">Preparando a Cobertura:</h4>
+                    <ol class="space-y-3 text-sm list-decimal list-inside text-gray-600">
+                        {% for passo in receita.modo_preparo_cobertura %}
+                        <li class="leading-relaxed pl-1">{{ passo }}</li>
+                        {% endfor %}
+                    </ol>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="text-center text-xs text-gray-500 my-8">
+        <p>Desenvolvido com Python, Flask e Tailwind CSS.</p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,37 @@
+name: Build and Push to Docker Hub
+
+# Dispara a pipeline toda vez que você der um 'git push' na branch main
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-and-push:
+    # Define o sistema operacional da máquina virtual da esteira
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Baixa o código do seu repositório para a máquina virtual
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # 2. Configura o ambiente para fazer builds Docker eficientes
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    # 3. Faz login no Docker Hub usando os segredos do repositório
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    # 4. Constrói a imagem e envia automaticamente para o seu Docker Hub
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v6
+      with:
+        context: .
+        push: true
+        tags: |
+          johnnyplus/site-bolo:latest
+          johnnyplus/site-bolo:${{ github.sha }}
