@@ -1,4 +1,3 @@
-
 name: Build e Deploy Docker II
 
 on:
@@ -39,9 +38,11 @@ jobs:
           username: ${{ secrets.AZURE_VM_USER }}
           key: ${{ secrets.AZURE_VM_SSH_KEY }}
           script: |
+            # Baixa a versão mais recente da imagem que a esteira acabou de compilar
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/app-docker-aula:latest
-            docker rm -f app-docker-aula || true
-            docker run -d --name app-docker-aula -p 80:80 --restart unless-stopped ${{ secrets.DOCKERHUB_USERNAME }}/app-docker-aula:latest
-
-
             
+            # Remove o container antigo (se existir) para liberar o nome e a porta
+            docker rm -f app-docker-aula || true
+            
+            # Inicializa o container mapeando a porta externa 88 para a porta interna 88
+            docker run -d --name app-docker-aula -p 88:88 --restart unless-stopped ${{ secrets.DOCKERHUB_USERNAME }}/app-docker-aula:latest
